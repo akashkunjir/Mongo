@@ -1,0 +1,17 @@
+db.employee.insert({eno:2,ename:'Seeta',hiredate:ISODate("2020-11-25")});
+db.employee.insert({eno:3,ename:'Amol',hiredate:ISODate("2020-11-25"),hobby:['Running','Reading']});
+db.employee.insert({eno:4,ename:'Kiran',hiredate:ISODate("2020-12-25"),hobby:['Running','Reading']});
+
+db.emp.find().pretty();
+
+db.emp.find({_id:0}).pretty();
+----------------------------------------
+capped collection
+
+db.createCollection("employee",{capped:true,max:3,size:3567,autoIndexId:true});
+
+db.employee.insert({eno:5,ename:'Kajal',hiredate:ISODate("2020-12-25"),hobby:['Running','Reading']});
+
+
+this collection will take maximum 3 documents. If 4th document is inserted then, topmost 
+document gets deleted automatically.

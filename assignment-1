@@ -1,0 +1,19 @@
+1. to find all movies with rating =3
+   
+   db.movie.find({rating:3}).pretty();
+2.to find all mivies with rating =3 and price=340 
+    
+    db.movie.find({rating:3,price:340},{_id:0,name:1});
+
+
+3. to find all movies with rating >3 and sort them ratingwise
+		db.movie.find({rating:{$gt:3}},{name:1,_id:0}).sort({rating:1});
+
+4. to find all movies with rating >3 and rating < 6
+		db.movie.find({rating:{$gt:3,$lt:6}},{name:1,_id:0});
+
+5.to find all movies with rating >3 or rating < 6		
+db.movie.find({$or:[{rating:{$gt:3,$lt:6}}]},{name:1,_id:0}); 
+
+7. to find all movies with price = either 200 or 340 or 240
+db.movie.find({price:{$in:[250,300,350]}}
