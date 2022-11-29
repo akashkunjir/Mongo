@@ -37,9 +37,9 @@ restaurants which contain 'Reg' as three letters somewhere in its name.
 29. Write a MongoDB query to find the restaurants which belong to the borough Bronx and 
 prepared either American or Chinese dish. 
 30. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those 
-restaurants which belong to the borough Staten Island or Queens or Bronxor Brooklyn. 
+restaurants which belong to the borough Staten Island or Queens or Bronx or Brooklyn. 
 31. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those 
-restaurants which are not belonging to the borough Staten Island or Queens or Bronxor 
+restaurants which are not belonging to the borough Staten Island or Queens or Bronx or 
 Brooklyn. 
 32. Write a MongoDB query to find the restaurant Id, name, borough and cuisine for those 
 restaurants which achieved a score which is not more than 10. 

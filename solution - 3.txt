@@ -1,0 +1,52 @@
+Create a collectin by name student. Following are the columns in the collection.
+School keeps remarks for all the students in collection.
+
+name:Ajit hobby:[Reading,Cycling] subject:[Maths,Geography] marks:[65,58]
+name:Sakshi  subject:[Science,Social Science,History] marks:[99,80,70]
+name:Anagha hobby:[Cooking,Swimming] subject:[english,German]  
+name:Manoj hobby:[Treking,running] subject:[Political Science] marks:[ 87]
+name:Bhumi hobby:[Reading,Cycling]  
+name:Ajit hobby:[Boxing,Music] subject:[Accounts,Economic] marks:[93,87]
+
+
+db.student.insertMany([
+{name:"Ajit", hobby:["Reading","Cycling"], subject:["Maths","Geography"], marks:[65,58]},
+{name:"Sakshi",  subject:["Science","Social Science","History"], marks:[99,80,70]},
+{name:"Anagha", hobby:["Cooking","Swimming"], subject:["English","German"]},
+{name:"Manoj", hobby:["Treking","Running"], subject:["Political Science"], marks:[87]},
+{name:"Bhumi", hobby:["Reading","Cycling"]},
+{name:"Ajit", hobby:["Boxing","Music"], subject:["Accounts","Economic"], marks:[93,87]}
+])
+
+
+================================================================================================
+1. Add key-value pair remarks for all documents.
+> db.student.update({},{$set:{remarks:""}}, {multi: true})
+> db.getCollection("student").update({}, {$set:{attendance: 75}}, {multi: true});
+
+================================================================================================
+2. Add remark "Arts Stream" for Manoj
+> db.student.update({name:"Manoj"}, {$set: {remarks: "Arts Stream"}})
+
+================================================================================================
+3. Increase marks of ajit by 10
+> db.student.update({name:"Ajit"}, {$inc: {"marks.$[]": 10}});
+================================================================================================
+4. Add key-value pair subject for Bhumi
+> db.student.update({name: "Bhumi"}, {$set: {subject:""}})
+================================================================================================
+5. Add one more subject 'English' for Anagha
+> db.student.update({name: "Anagha"}, {$set: {subject:["English", "Germany"]}})
+================================================================================================
+6. Delete subject 'Science' for  Sakshi
+> db.student.update({name: "Sakshi"}, { $pull: { subject: "Science"}})
+================================================================================================
+7. Display all documents where name starts with 'A'
+> db.student.find({name:/^A.*/}).pretty()
+================================================================================================
+8. Add one more subject 'Economics' for Manoj
+> db.student.update({name: "Manoj"}, { $push: { subject: "Economics"}})
+================================================================================================
+
+
+db.movie.aggregate([{$group: { _id: null, sump: {$sum: '$price'}, avgp:{$avg : '$ratings'}}}])

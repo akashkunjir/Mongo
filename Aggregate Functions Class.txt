@@ -1,0 +1,110 @@
+AGGREGAT FUNCTIONS:
+	- ADVANCED FUNCTIONS
+	- MAP AND REDUCE IS REPLACED BY AGGREGATE FUNCTION 
+
+OPERTORS:
+	- $project - projection
+	- $match - finds first match for the document
+	- $group - works on collective data and gives functions like
+				$sum, $avg, $min, $max
+	- $sort - sort data
+	- $skip - skips the number of documents
+	- $limit - keeps that number of documents
+
+SYNTAX/FORMAT:
+	- db.collection.aggregate([{f1}, {f2}, {f3}, {f4}])
+	output flows from f1 to f2 - f3 - f4 
+
+
+Q. Display first 5 topmost rating documents arrange them by names in descending order
+> db.movie.aggregate([
+						{$sort: {rating: -1}},
+						{$limit: 5},
+						{$project: {name: 1}}
+						])	
+{ "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"), "name" : "Kesari" }
+{ "_id" : ObjectId("5aaa3334639395f86922a880"), "name" : "lagaan" }
+{ "_id" : ObjectId("5d6935a3470e2bef2a82cdfa"), "name" : "mission mangal" }
+{ "_id" : ObjectId("5aaa3334639395f86922a881"), "name" : "sholay" }
+{ "_id" : ObjectId("5c8283789eb55675f0272933"), "name" : "uri" }
+
+
+Q. Find sum of prices of all movies and avg rating of all movies
+> db.movie.aggregate([{$group: { _id: null, sump: {$sum: '$price'}, avgp:{$avg : '$ratings'}}}])
+{ "_id" : null, "sump" : 10859.059199999998, "avgp" : null }
+
+> db.movie.aggregate([{$group: { _id: null, sump: {$sum: '$price'}, avgp:{$avg : '$rating'}}}])
+{ "_id" : null, "sump" : 10859.059199999998, "avgp" : 4.42 }
+
+
+Q. Find sum and avg rating of all movies who have name starting from K
+> db.movie.aggregate([{$match: {name: /^K.*/}},{$group: {_id:null, sump: {$sum: '$price'}, avgp: {$avg: '$rating'}}}]);
+{ "_id" : null, "sump" : 420, "avgp" : 6 }
+
+
+Q. Find sum of prices for all ratings of movies
+> db.movie.aggregate([{$group: {_id:'$rating', sump: {$sum:'$price'}}}])
+{ "_id" : 5, "sump" : 1791.5903999999996 }
+{ "_id" : 3, "sump" : 2498.1888 }
+{ "_id" : 2, "sump" : 360 }
+{ "_id" : null, "sump" : 1008 }
+{ "_id" : 6, "sump" : 3378.0863999999992 }
+{ "_id" : 4, "sump" : 1494.3935999999999 }
+{ "_id" : 4.3, "sump" : 328.8 }
+>
+
+
+Q. Find sum, avg, min, max, count of all movies rating wise
+> db.movie.aggregate([{$group: {_id: '$rating', sump: {$sum: '$price'}, avgp: {$avg: '$price'}, minp: {$min: '$price'},m
+axp: { $max: '$price'}, countm: {$sum: 1} }}])
+{ "_id" : 5, "sump" : 1791.5903999999996, "avgp" : 895.7951999999998, "minp" : 895.7951999999998, "maxp" : 895.795199999
+9998, "countm" : 3 }
+{ "_id" : 3, "sump" : 2498.1888, "avgp" : 832.7296, "minp" : 408, "maxp" : 1492.9919999999997, "countm" : 3 }
+{ "_id" : 2, "sump" : 360, "avgp" : 360, "minp" : 360, "maxp" : 360, "countm" : 1 }
+{ "_id" : null, "sump" : 1008, "avgp" : 336, "minp" : 300, "maxp" : 372, "countm" : 3 }
+{ "_id" : 6, "sump" : 3378.0863999999992, "avgp" : 844.5215999999998, "minp" : 420, "maxp" : 1492.9919999999997, "countm
+" : 4 }
+{ "_id" : 4, "sump" : 1494.3935999999999, "avgp" : 747.1967999999999, "minp" : 300, "maxp" : 1194.3935999999999, "countm
+" : 3 }
+{ "_id" : 4.3, "sump" : 328.8, "avgp" : 328.8, "minp" : 328.8, "maxp" : 328.8, "countm" : 1 }
+>
+
+
+Q. Find 2nd highest sum of prices in all ratings /rating wise
+> db.movie.aggregate([
+						{$group:{_id:'$rating', total: {$sum: '$price'}}}, 
+						{ $sort: {total: -1} }, 
+						{ $skip: 1 }, 
+						{ $limit: 1 }
+						]);
+{ "_id" : 3, "total" : 2498.1888 }
+
+
+Q. Find sum, min, max, avg, count for all movies rating wse with rating > 3
+> db.movie.aggregate([
+						{ $match: { rating: { $gt:3 }}},
+						{ $group: { _id: '$rating', 
+						sump: {$sum: '$price'},
+						avgp: {$avg: '$price'},
+						minp: {$min: '$price'},
+						maxp: {$max: '$price'},
+						countm: {$sum: 1}}}
+					])
+
+> db.movie.aggregate([
+... { $match: { rating: { $gt:3 }}},
+... { $group: { _id: '$rating',
+... sump: {$sum: '$price'},
+... avgp: {$avg: '$price'},
+... minp: {$min: '$price'},
+... maxp: {$max: '$price'},
+... countm: {$sum: 1}}}
+... ])
+{ "_id" : 5, "sump" : 1791.5903999999996, "avgp" : 895.7951999999998, "minp" : 895.7951999999998, "maxp" : 895.795199999
+9998, "countm" : 3 }
+{ "_id" : 6, "sump" : 3378.0863999999992, "avgp" : 844.5215999999998, "minp" : 420, "maxp" : 1492.9919999999997, "countm
+" : 4 }
+{ "_id" : 4, "sump" : 1494.3935999999999, "avgp" : 747.1967999999999, "minp" : 300, "maxp" : 1194.3935999999999, "countm
+" : 3 }
+{ "_id" : 4.3, "sump" : 328.8, "avgp" : 328.8, "minp" : 328.8, "maxp" : 328.8, "countm" : 1 }
+>

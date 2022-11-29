@@ -1,3 +1,6 @@
+mongoimport --db test --collection student --file ""
+
+
 Windows PowerShell
 Copyright (C) 2014 Microsoft Corporation. All rights reserved.
 
@@ -2354,6 +2357,8 @@ sh Rawal" ] }
 { "name" : "3 idiots", "rating" : 3, "price" : 200 }
 { "name" : "Andhadhund", "price" : 400, "rating" : 4 }
 { "name" : "Andhadhund", "price" : null, "rating" : 4 }
+
+
 > db.movie.find({}, {name:1, rating:1, price:1, _id:0}).sort({name:1}).limit(1).skip(1).pretty();
 { "name" : "3 idiots", "rating" : 3, "price" : 200 }
 > db.movie.find({}, {name:1, rating:1, price:1, _id:0}).sort({name:1}).pretty();
